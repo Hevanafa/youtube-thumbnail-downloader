@@ -32,6 +32,7 @@ namespace YouTubeThumbnailDownloader
         void WriteLog(string text)
         {
             txbLog.BeginInvoke(new Action(() =>
+                // https://stackoverflow.com/questions/898307/
                 txbLog.AppendText($"{text}\r\n")
             ));
         }
@@ -57,6 +58,7 @@ namespace YouTubeThumbnailDownloader
 
             try
             {
+                // https://webscraping.ai/faq/httpclient-c/how-do-i-update-the-base-address-of-an-existing-httpclient-c-instance
                 var req = new HttpRequestMessage(HttpMethod.Get, txbUrl.Text);
                 var res = await client.SendAsync(req);
 
