@@ -1,5 +1,6 @@
 ﻿using AngleSharp.Html.Parser;
 using System;
+using System.Drawing;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
@@ -15,6 +16,8 @@ namespace YouTubeThumbnailDownloader
         public Form1()
         {
             InitializeComponent();
+
+            
         }
 
         private void btnDownload_Click(object sender, EventArgs e)
@@ -56,8 +59,12 @@ namespace YouTubeThumbnailDownloader
             //MessageBox.Show("Saved as temp.html");
 
             var uri = new Uri(txbUrl.Text);
-            var hash = HttpUtility.ParseQueryString(uri.Query).Get("v");
-            WriteLog(hash);
+
+            var hash = txbUrl.Text.Contains("shorts")
+                ? Path.GetFileName(txbUrl.Text)
+                : HttpUtility.ParseQueryString(uri.Query).Get("v");
+
+            WriteLog("Hash: " + hash);
 
             var sr = new StreamReader("temp.html");
             var html = await sr.ReadToEndAsync();
@@ -69,7 +76,13 @@ namespace YouTubeThumbnailDownloader
             var imgHref = node.GetAttribute("href");
             WriteLog("Found the link: " + imgHref);
 
-            var ext = Path.GetExtension(imgHref);
+            // https://stackoverflow.com/questions/4630249/
+            var imgUri = new Uri(imgHref);
+            var imgUriPath = imgUri.GetLeftPart(UriPartial.Path);
+            //WriteLog(imgUriPath);
+            //return;
+
+            var ext = Path.GetExtension(imgUriPath);
             newFilename = hash + ext;
             //WriteLog("Filename: " + newFilename);
 
@@ -79,11 +92,14 @@ namespace YouTubeThumbnailDownloader
 
             using (var client = new WebClient()) {
                 client.DownloadFileCompleted += Client_DownloadFileCompleted1;
-                client.DownloadFileAsync(new Uri(imgHref), $"thumbs\\{newFilename}");
+                client.DownloadFileAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
             }
 
-            // Todo: handle the use case for different resolutions
+            // Todo: handle the case for Shorts
+            // https://i.ytimg.com/vi/lhfBIsHmhSs/oardefault.jpg?sqp=-oaymwEkCJUDENAFSFqQAgHyq4qpAxMIARUAAAAAJQAAyEI9AICiQ3gB&rs=AOn4CLCEtR7lA0dDWmwsYAppArMjQaNfaA
+
             // Done: handle the use case for livestreams
+            // Todo:: handle the case for YT Shorts
         }
 
         string newFilename;
@@ -91,6 +107,8 @@ namespace YouTubeThumbnailDownloader
         private void Client_DownloadFileCompleted1(object sender, AsyncCompletedEventArgs e)
         {
             WriteLog("Saved as " + newFilename);
+
+            pbPreview.BackgroundImage = Image.FromFile($"thumbs\\{newFilename}");
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -99,6 +117,16 @@ namespace YouTubeThumbnailDownloader
                 Directory.CreateDirectory("thumbs");
 
             Process.Start(".\\thumbs");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            pbPreview.BackgroundImage = Image.FromFile("thumbs\\kBdkwdK6VYA.jpg");
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txbLog.Clear();
         }
     }
 }

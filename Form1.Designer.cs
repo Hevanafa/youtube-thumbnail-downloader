@@ -28,10 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.txbUrl = new System.Windows.Forms.TextBox();
             this.btnDownload = new System.Windows.Forms.Button();
             this.txbLog = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pbPreview = new System.Windows.Forms.PictureBox();
+            this.btnClear = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // txbUrl
@@ -58,6 +63,7 @@
             this.txbLog.Location = new System.Drawing.Point(13, 89);
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
+            this.txbLog.ReadOnly = true;
             this.txbLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txbLog.Size = new System.Drawing.Size(400, 134);
             this.txbLog.TabIndex = 3;
@@ -72,19 +78,53 @@
             this.btnBrowse.UseVisualStyleBackColor = true;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(420, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 19);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Preview";
+            // 
+            // pbPreview
+            // 
+            this.pbPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbPreview.Location = new System.Drawing.Point(420, 32);
+            this.pbPreview.Name = "pbPreview";
+            this.pbPreview.Size = new System.Drawing.Size(229, 229);
+            this.pbPreview.TabIndex = 5;
+            this.pbPreview.TabStop = false;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(312, 229);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(100, 32);
+            this.btnClear.TabIndex = 6;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(425, 235);
+            this.ClientSize = new System.Drawing.Size(661, 273);
+            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.pbPreview);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.txbLog);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txbUrl);
             this.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
-            this.Text = "YouTube Thumbnail Downloader";
+            this.Text = "YouTube Thumbnail Downloader - By Hevanafa (March 2024)";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pbPreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -96,6 +136,9 @@
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.TextBox txbLog;
         private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pbPreview;
+        private System.Windows.Forms.Button btnClear;
     }
 }
 
