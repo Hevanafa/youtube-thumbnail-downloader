@@ -41,6 +41,9 @@
             // 
             // txbUrl
             // 
+            this.txbUrl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.txbUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txbUrl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(5)))));
             this.txbUrl.Location = new System.Drawing.Point(13, 13);
             this.txbUrl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txbUrl.Name = "txbUrl";
@@ -49,17 +52,23 @@
             // 
             // btnDownload
             // 
+            this.btnDownload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(24)))), ((int)(((byte)(12)))));
+            this.btnDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDownload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(5)))));
             this.btnDownload.Location = new System.Drawing.Point(312, 48);
             this.btnDownload.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(100, 34);
             this.btnDownload.TabIndex = 2;
             this.btnDownload.Text = "Download";
-            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.UseVisualStyleBackColor = false;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // txbLog
             // 
+            this.txbLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.txbLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txbLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.txbLog.Location = new System.Drawing.Point(13, 89);
             this.txbLog.Multiline = true;
             this.txbLog.Name = "txbLog";
@@ -70,12 +79,15 @@
             // 
             // btnBrowse
             // 
+            this.btnBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(24)))), ((int)(((byte)(12)))));
+            this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBrowse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(5)))));
             this.btnBrowse.Location = new System.Drawing.Point(13, 47);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(100, 34);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "Browse";
-            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.UseVisualStyleBackColor = false;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // label1
@@ -98,18 +110,22 @@
             // 
             // btnClear
             // 
+            this.btnClear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(24)))), ((int)(((byte)(12)))));
+            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(100)))), ((int)(((byte)(5)))));
             this.btnClear.Location = new System.Drawing.Point(312, 229);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(100, 32);
             this.btnClear.TabIndex = 6;
             this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(13)))), ((int)(((byte)(13)))));
             this.ClientSize = new System.Drawing.Size(661, 273);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.pbPreview);
