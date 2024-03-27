@@ -31,21 +31,6 @@ namespace YouTubeThumbnailDownloader
             var thread = new Thread(async () => {
                 try
                 {
-                    // https://stackoverflow.com/questions/9459225/
-                    //var client = new WebClient();
-
-                    ////client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                    //client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                    //await client.DownloadFileTaskAsync(new Uri(txbUrl.Text), "temp.html");
-
-                    //ProcessHtmlFile();
-
-                    //File.Delete("temp.html");
-
-                    //client.BaseAddress = new Uri(txbUrl.Text);
-                    //client.DefaultRequestHeaders.Accept.Clear();
-                    //var res = await client.GetAsync(txbUrl.Text);
-
                     var req = new HttpRequestMessage(HttpMethod.Get, txbUrl.Text);
                     var res = await client.SendAsync(req);
 
@@ -87,7 +72,7 @@ namespace YouTubeThumbnailDownloader
         // https://stackoverflow.com/questions/49981433/
         void WriteLog(string text) {
             txbLog.BeginInvoke(new Action(() =>
-                txbLog.Text += text + "\r\n"
+                txbLog.AppendText($"{text}\r\n")
             ));
         }
 
@@ -132,14 +117,27 @@ namespace YouTubeThumbnailDownloader
             CheckCreateDownloadsFolder();
             // Actually download the image
 
-            var client = new WebClient();
+            //var client = new WebClient();
             //client.DownloadFileCompleted += Client_DownloadFileCompleted1;
-            await client.DownloadFileTaskAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
+            //await client.DownloadFileTaskAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
 
-            WriteLog("Saved as " + newFilename);
+            var req = new HttpRequestMessage(HttpMethod.Get, imgUriPath);
+            var res = await client.SendAsync(req);
 
-            // https://stackoverflow.com/questions/17193825/
-            pbPreview.BackgroundImage = Image.FromFile($"thumbs\\{newFilename}");
+            if (res.IsSuccessStatusCode) {
+                var content = res.Content;
+
+                if (File.Exists($"thumbs\\{newFilename}"))
+                    File.Delete($"thumbs\\{newFilename}");
+
+                using (var stream = new FileStream($"thumbs\\{newFilename}", FileMode.CreateNew))
+                    await content.CopyToAsync(stream);
+
+                WriteLog("Saved as " + newFilename);
+
+                // https://stackoverflow.com/questions/17193825/
+                pbPreview.BackgroundImage = Image.FromFile($"thumbs\\{newFilename}");
+            }
 
 
             // Done: handle the use case for livestreams
