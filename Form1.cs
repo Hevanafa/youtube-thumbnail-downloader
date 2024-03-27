@@ -22,9 +22,12 @@ namespace YouTubeThumbnailDownloader
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
+            // Todo: subsequent downloads use the same image as the first one
+
             var thread = new Thread(() => {
                 try
                 {
+                    // https://stackoverflow.com/questions/9459225/
                     using (var client = new WebClient())
                     {
                         //client.DownloadProgressChanged += Client_DownloadProgressChanged;
@@ -74,6 +77,7 @@ namespace YouTubeThumbnailDownloader
 
             var hash = txbUrl.Text.Contains("shorts")
                 ? Path.GetFileName(txbUrl.Text)
+                // https://stackoverflow.com/questions/659887/
                 : HttpUtility.ParseQueryString(uri.Query).Get("v");
 
             WriteLog("Hash: " + hash);
@@ -84,12 +88,16 @@ namespace YouTubeThumbnailDownloader
             var parser = new HtmlParser();
             var document = parser.ParseDocument(html);
 
+            // https://stackoverflow.com/questions/36368789/
             var node = document.QuerySelector("link[itemprop=\"thumbnailUrl\"]");
+
+            // https://stackoverflow.com/questions/57705418/
             var imgHref = node.GetAttribute("href");
             WriteLog("Found the link: " + imgHref);
 
-            // https://stackoverflow.com/questions/4630249/
             var imgUri = new Uri(imgHref);
+
+            // https://stackoverflow.com/questions/4630249/
             var imgUriPath = imgUri.GetLeftPart(UriPartial.Path);
             //WriteLog(imgUriPath);
             //return;
@@ -106,11 +114,9 @@ namespace YouTubeThumbnailDownloader
                 client.DownloadFileAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
             }
 
-            // Todo: handle the case for Shorts
-            // https://i.ytimg.com/vi/lhfBIsHmhSs/oardefault.jpg?sqp=-oaymwEkCJUDENAFSFqQAgHyq4qpAxMIARUAAAAAJQAAyEI9AICiQ3gB&rs=AOn4CLCEtR7lA0dDWmwsYAppArMjQaNfaA
-
             // Done: handle the use case for livestreams
-            // Todo:: handle the case for YT Shorts
+            // Done: handle the case for Shorts
+            // https://i.ytimg.com/vi/lhfBIsHmhSs/oardefault.jpg?sqp=-oaymwEkCJUDENAFSFqQAgHyq4qpAxMIARUAAAAAJQAAyEI9AICiQ3gB&rs=AOn4CLCEtR7lA0dDWmwsYAppArMjQaNfaA
         }
 
         string newFilename;
@@ -119,6 +125,7 @@ namespace YouTubeThumbnailDownloader
         {
             WriteLog("Saved as " + newFilename);
 
+            // https://stackoverflow.com/questions/17193825/
             pbPreview.BackgroundImage = Image.FromFile($"thumbs\\{newFilename}");
         }
 
