@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Web;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace YouTubeThumbnailDownloader
 {
@@ -20,19 +21,47 @@ namespace YouTubeThumbnailDownloader
             
         }
 
+        HttpClient client = new HttpClient();
+
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            // Todo: subsequent downloads use the same image as the first one
+            // Done: subsequent downloads use the same image as the first one
+            // Todo: rewrite the WebClient below with HttpClient
 
-            var thread = new Thread(() => {
+            var thread = new Thread(async () => {
                 try
                 {
                     // https://stackoverflow.com/questions/9459225/
-                    using (var client = new WebClient())
+                    //var client = new WebClient();
+
+                    ////client.DownloadProgressChanged += Client_DownloadProgressChanged;
+                    //client.DownloadFileCompleted += Client_DownloadFileCompleted;
+                    //await client.DownloadFileTaskAsync(new Uri(txbUrl.Text), "temp.html");
+
+                    //ProcessHtmlFile();
+
+                    //File.Delete("temp.html");
+
+                    //client.BaseAddress = new Uri(txbUrl.Text);
+                    //client.DefaultRequestHeaders.Accept.Clear();
+                    //var res = await client.GetAsync(txbUrl.Text);
+
+                    var req = new HttpRequestMessage(HttpMethod.Get, txbUrl.Text);
+                    var res = await client.SendAsync(req);
+
+                    if (res.IsSuccessStatusCode)
                     {
-                        //client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                        client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                        client.DownloadFileAsync(new Uri(txbUrl.Text), "temp.html");
+                        File.Delete("temp.html");
+
+                        var content = res.Content;
+                        //var stream = await content.ReadAsStreamAsync();
+                        using (var stream = new FileStream("temp.html", FileMode.CreateNew, FileAccess.Write, FileShare.ReadWrite))
+                            await content.CopyToAsync(stream);
+
+                        ProcessHtmlFile();
+                    }
+                    else {
+                        WriteLog("Error while downloading");
                     }
                 }
                 catch (Exception ex) {
@@ -55,11 +84,6 @@ namespace YouTubeThumbnailDownloader
                 Directory.CreateDirectory("thumbs");
         }
 
-        //private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         // https://stackoverflow.com/questions/49981433/
         void WriteLog(string text) {
             txbLog.BeginInvoke(new Action(() =>
@@ -67,10 +91,7 @@ namespace YouTubeThumbnailDownloader
             ));
         }
 
-        
-
-        private async void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
+        async void ProcessHtmlFile() {
             //MessageBox.Show("Saved as temp.html");
 
             var uri = new Uri(txbUrl.Text);
@@ -84,6 +105,8 @@ namespace YouTubeThumbnailDownloader
 
             var sr = new StreamReader("temp.html");
             var html = await sr.ReadToEndAsync();
+            sr.Close();
+            File.Delete("temp.html");
 
             var parser = new HtmlParser();
             var document = parser.ParseDocument(html);
@@ -109,14 +132,24 @@ namespace YouTubeThumbnailDownloader
             CheckCreateDownloadsFolder();
             // Actually download the image
 
-            using (var client = new WebClient()) {
-                client.DownloadFileCompleted += Client_DownloadFileCompleted1;
-                client.DownloadFileAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
-            }
+            var client = new WebClient();
+            //client.DownloadFileCompleted += Client_DownloadFileCompleted1;
+            await client.DownloadFileTaskAsync(new Uri(imgUriPath), $"thumbs\\{newFilename}");
+
+            WriteLog("Saved as " + newFilename);
+
+            // https://stackoverflow.com/questions/17193825/
+            pbPreview.BackgroundImage = Image.FromFile($"thumbs\\{newFilename}");
+
 
             // Done: handle the use case for livestreams
             // Done: handle the case for Shorts
             // https://i.ytimg.com/vi/lhfBIsHmhSs/oardefault.jpg?sqp=-oaymwEkCJUDENAFSFqQAgHyq4qpAxMIARUAAAAAJQAAyEI9AICiQ3gB&rs=AOn4CLCEtR7lA0dDWmwsYAppArMjQaNfaA
+        }
+
+        private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            WriteLog("temp.html is available");
         }
 
         string newFilename;
