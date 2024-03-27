@@ -39,7 +39,17 @@ namespace YouTubeThumbnailDownloader
 
             WriteLog("Starting download...");
 
+            if (!txbUrl.Text.Contains("https://www.youtube.com")) {
+                WriteLog("Error: The URL isn't a valid YouTube link!");
+                return;
+            }
+
             thread.Start();
+        }
+
+        void CheckCreateDownloadsFolder() {
+            if (!Directory.Exists("thumbs"))
+                Directory.CreateDirectory("thumbs");
         }
 
         //private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -53,6 +63,8 @@ namespace YouTubeThumbnailDownloader
                 txbLog.Text += text + "\r\n"
             ));
         }
+
+        
 
         private async void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
@@ -86,9 +98,8 @@ namespace YouTubeThumbnailDownloader
             newFilename = hash + ext;
             //WriteLog("Filename: " + newFilename);
 
+            CheckCreateDownloadsFolder();
             // Actually download the image
-            if (!Directory.Exists("thumbs"))
-                Directory.CreateDirectory("thumbs");
 
             using (var client = new WebClient()) {
                 client.DownloadFileCompleted += Client_DownloadFileCompleted1;
@@ -113,15 +124,14 @@ namespace YouTubeThumbnailDownloader
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists("thumbs"))
-                Directory.CreateDirectory("thumbs");
+            CheckCreateDownloadsFolder();
 
             Process.Start(".\\thumbs");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            pbPreview.BackgroundImage = Image.FromFile("thumbs\\kBdkwdK6VYA.jpg");
+            //pbPreview.BackgroundImage = Image.FromFile("thumbs\\kBdkwdK6VYA.jpg");
         }
 
         private void btnClear_Click(object sender, EventArgs e)
